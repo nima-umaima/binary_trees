@@ -1,20 +1,49 @@
+
 #include "binary_trees.h"
 
 /**
- * binary_tree_size - Measures the size of a binary tree.
- * @tree: A pointer to the root node of the tree to measure the size of.
+ * bst_insert - Inserts a value in a Binary Search Tree.
+ * @tree: A double pointer to the root node of the BST to insert the value.
+ * @value: The value to store in the node to be inserted.
  *
- * Return: The size of the tree.
+ * Return: A pointer to the created node, or NULL on failure.
  */
-size_t binary_tree_size(const binary_tree_t *tree)
+bst_t *bst_insert(bst_t **tree, int value)
 {
-	size_t size = 0;
+	bst_t *curr, *new;
 
-	if (tree)
+	if (tree != NULL)
 	{
-		size += 1;
-		size += binary_tree_size(tree->left);
-		size += binary_tree_size(tree->right);
+		curr = *tree;
+
+		if (curr == NULL)
+		{
+			new = binary_tree_node(curr, value);
+			if (new == NULL)
+				return (NULL);
+			return (*tree = new);
+		}
+
+		if (value < curr->n) /* insert in left subtree */
+		{
+			if (curr->left != NULL)
+				return (bst_insert(&curr->left, value));
+
+			new = binary_tree_node(curr, value);
+			if (new == NULL)
+				return (NULL);
+			return (curr->left = new);
+		}
+		if (value > curr->n) /* insert in right subtree */
+		{
+			if (curr->right != NULL)
+				return (bst_insert(&curr->right, value));
+
+			new = binary_tree_node(curr, value);
+			if (new == NULL)
+				return (NULL);
+			return (curr->right = new);
+		}
 	}
-	return (size);
+	return (NULL);
 }
